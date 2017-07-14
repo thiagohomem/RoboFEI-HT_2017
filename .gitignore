@@ -1,0 +1,57 @@
+
+*.pyc
+
+*.so
+
+env/
+build/
+AI/Vision/Data/*.ini
+AI/Control/Data/*.ini
+AI/Control/Data/*.bin
+AI/Vision/src/.thresholds
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+*.manifest
+*.spec
+*~
+
+pip-log.txt
+pip-delete-this-directory.txt
+
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.xml
+*,cover
+.hypothesis/
+*.idea
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+#Ipython Notebook
+.ipynb_checkpoints
