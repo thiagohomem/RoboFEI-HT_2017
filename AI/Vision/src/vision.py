@@ -1,3 +1,5 @@
+# -*- coding: UTF8 -*-
+
 import sys
 sys.path.append("./src")
 import numpy as np
@@ -10,7 +12,7 @@ from math import log,exp,tan,radians
 import thread
 import imutils
 
-from BallVision import *
+#from BallVision import *
 from DNN import *
 
 import sys
@@ -62,12 +64,12 @@ parser.add_argument('--nogpu', action='store_true', help="Don't use the GPU")
 y_limit1 = 300
 y_limit2 = 400
 
-SERVO_PAN = 19
-SERVO_TILT = 20
+
 
 x = 0
 y = 0
 raio = 0
+
 
 #----------------------------------------------------------------------------------------------------------------------------------
 
@@ -77,27 +79,34 @@ x_limit23 = 450
 x_limit34 = 470
 x_limit45 = 900
 
-def BallStatus(x,y):
-	#Bola a esquerda
-	if (x > x_limit01 and x < x_limit12):
-		bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
-		print ("Bola a Esquerda")
+def BallStatus(x,y,status):
+	if status  == 1:
+		#Bola a esquerda
+		if (x > x_limit01 and x < x_limit12):
+			bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
+			print ("Bola a Esquerda")
 
-	#Bola ao centro
-	if (x > x_limit12 and x < x_limit23):
-		bkb.write_float(Mem,'VISION_PAN_DEG', 30) # Variavel da telemetria
-		print ("Bola ao Centro Esquerda")
+		#Bola ao centro
+		if (x > x_limit12 and x < x_limit23):
+			bkb.write_float(Mem,'VISION_PAN_DEG', 30) # Variavel da telemetria
+			print ("Bola ao Centro Esquerda")
 
-	#Bola a direita
-	if (x > x_limit23 and x < x_limit34):
-		bkb.write_float(Mem,'VISION_PAN_DEG', -30) # Variavel da telemetria
-		print ("Bola ao Centro Direita")
+		#Bola a direita
+		if (x > x_limit23 and x < x_limit34):
+			bkb.write_float(Mem,'VISION_PAN_DEG', -30) # Variavel da telemetria
+			print ("Bola ao Centro Direita")
 
-	#Bola a direita
-	if (x > x_limit34 and x < x_limit45):
-		bkb.write_float(Mem,'VISION_PAN_DEG', -60) # Variavel da telemetria
-		print ("Bola a Direita")
-
+		#Bola a direita
+		if (x > x_limit34 and x < x_limit45):
+			bkb.write_float(Mem,'VISION_PAN_DEG', -60) # Variavel da telemetria
+			print ("Bola a Direita")
+	else: 
+		if (status ==0):
+			bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
+			print ("Bola a Esquerda")
+		else:
+			bkb.write_float(Mem,'VISION_PAN_DEG', -60) # Variavel da telemetria
+			print ("Bola a Direita")
 
 
 	#CUIDADO AO ALTERAR OS VALORES ABAIXO!! O código abaixo possui inversão de eixos!
@@ -116,7 +125,8 @@ def BallStatus(x,y):
 	#Bola acima
 	if (y > y_limit2 and y < 720):
 		bkb.write_float(Mem,'VISION_TILT_DEG', 0) # Variavel da telemetria
-		print ("Bola abaixo")
+		print ("Bola abaixo")\
+
 
 def applyMask(frame):
 	lower = np.array([23, 0,0])
@@ -183,9 +193,12 @@ def thread_DNN():
 		start = time.time()
 #===============================================================================
 		ball = False
-		frame_b, x, y, raio, ball= detectBall.searchball(frame)
-		
-		BallStatus(x,y)
+		frame_b, x, y, raio, ball, status= detectBall.searchball(frame)
+		if ball ==False:
+			bkb.write_int(Mem,'VISION_LOST', 1)
+		else:
+			bkb.write_int(Mem,'VISION_LOST', 0)
+			BallStatus(x,y,status)
 		#if args2.visionball:
 		cv2.circle(frame_b, (x, y), raio, (0, 255, 0), 4)
 		cv2.imshow('frame',frame_b)
@@ -273,6 +286,7 @@ if __name__ == '__main__':
                 ret, frame = cap.read()
                 frame = frame[:,200:1100]
 		
+		
 		print "FRAME = ", time.time() - script_start_time
 		start = time.time()
 #===============================================================================
@@ -291,7 +305,9 @@ if __name__ == '__main__':
 #			cv2.imshow('Frame Deteccao',frame)
 #===============================================================================
 		print "tempo de varredura = ", time.time() - start
-
+		#cv2.imshow('frame',frame)
+		#if cv2.waitKey(1) & 0xFF == ord('q'):
+		#	break
 
 #===============================================================================
 

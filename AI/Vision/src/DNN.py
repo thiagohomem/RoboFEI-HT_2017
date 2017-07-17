@@ -19,8 +19,12 @@ from servo import Servo
 
 import Condensation
 
+SERVO_PAN = 19
+SERVO_TILT = 20
 
 
+servo = None
+servo = Servo(440, 670)
 
 class objectDetect():
     CountLostFrame = 0
@@ -37,6 +41,7 @@ class objectDetect():
     labels = None
     net = None
     transformer = None
+    status =1
 
     def __init__(self, net, transformer, mean_file, labels):
         self.mean_file = mean_file
@@ -46,13 +51,13 @@ class objectDetect():
 
     def searchball(self, image):
         BallFound = False
-        frame, x, y, raio = Morphology(self,image,self.kernel_perto2)
+        frame, x, y, raio = Morphology(self,image,self.kernel_perto, self.kernel_perto2,1)
         if (x==0 and y==0 and raio==0):
-            frame, x, y, raio = Morphology(self,image,self.kernel_medio2)
+            frame, x, y, raio = Morphology(self,image,self.kernel_medio ,self.kernel_medio2,2)
             if (x==0 and y==0 and raio==0):
-                frame, x, y, raio = Morphology(self,image,self.kernel_longe2)
+                frame, x, y, raio = Morphology(self,image,self.kernel_longe , self.kernel_longe2,3)
                 if (x==0 and y==0 and raio==0):
-                    frame, x, y, raio = Morphology(self,image,self.kernel_muito_longe2)
+                    frame, x, y, raio = Morphology(self,image,self.kernel_muito_longe, self.kernel_muito_longe2,4)
                     if (x==0 and y==0 and raio==0):
                         self.CountLostFrame +=1
                         print("@@@@@@@@@@@@@@@@@@@",self.CountLostFrame)
@@ -66,41 +71,63 @@ class objectDetect():
                             print("----------------------------------------------------------------------")
                             print("----------------------------------------------------------------------")
                             print("----------------------------------------------------------------------")
-                            SearchLostBall()
+                            self.status = SearchLostBall(self)
 
         if (x!=0 and y!=0 and raio!=0):
             BallFound = True
-        return frame, x, y, raio, BallFound
+        return frame, x, y, raio, BallFound, self.status
 
 
 def SearchLostBall(self):
 
     if self.Count == 0:
-        servo.writeWord(self.__SERVO_PAN, self.__SPEED, 200)
-        Count +=1
-        return 0
+        servo.writeWord(SERVO_PAN,30 , 100) #olha para a esquerda
+        time.sleep(1)
+        self.Count +=1
+        return self.Count
     if self.Count == 1:
-        servo.writeWord(self.__SERVO_PAN, self.__SPEED, 512)
-        Count +=1
-        return 0
+        servo.writeWord(SERVO_PAN,30, 440)#olha para o centro
+        time.sleep(1)
+        self.Count +=1
+        return self.Count
     if self.Count == 2:
-        servo.writeWord(self.__SERVO_PAN, self.__SPEED, 800)
-        Count = 0
-        return 0
+        servo.writeWord(SERVO_PAN,30, 850)#olha para a direita
+        time.sleep(1)
+        self.Count = 0
+        return self.Count
 
 
 
 
-def Morphology(self, frame, kernel):
+def Morphology(self, frame, kernel, kernel2, k):
+
+
+
 
     YUV_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2YUV)
     white_mask = cv2.inRange(YUV_frame[:,:,0], 200, 255)
 #    cv2.imshow('mask',white_mask)
-    mask = cv2.morphologyEx(white_mask, cv2.MORPH_OPEN, self.kernel_perto)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_DILATE, self.kernel_perto2,1)
+    mask = cv2.morphologyEx(white_mask, cv2.MORPH_OPEN, kernel)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_DILATE, kernel2,1)
+# Se a morfologia de perto k =1, recorta a parte de cima
+    if k ==1:
+        mask[0:200,:]=0
+# Se a morfologia medio k =2, recorta a parte de baixo
+    if k ==2:
+        mask[650:,:]=0
+# Se a morfologia de longe k =3, recorta a parte de baixo
+    if k ==3:
+        mask[520:,:]=0
+# Se a morfologia de muito longe k = 4, recorta a parte de baixo
+    if k ==4:
+        mask[500:,:]=0
+
 
     ret,th1 = cv2.threshold(mask,25,255,cv2.THRESH_BINARY)
-    contours,hierarchy = cv2.findContours(th1, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+
+    start = time.time()
+    _,contours,_ = cv2.findContours(th1, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+
     for cnt in contours:
         x,y,w,h = cv2.boundingRect(cnt)
             #Passa para o classificador as imagens recortadas-----------------------
@@ -109,11 +136,13 @@ def Morphology(self, frame, kernel):
                                                            mean_file=self.mean_file, labels=self.labels,
                                                            batch_size=None)
         #-----------------------------------------------------------------------
+
 #            print results, type_label
     #       cv2.imshow('janela',images[0])
         if type_label == 'Ball':
             return frame, x+w/2, y+h/2, (w+h)/4
         #=================================================================================================
+    print "CONTOURS = ", time.time() - start 
     return frame, 0, 0, 0
 
 
