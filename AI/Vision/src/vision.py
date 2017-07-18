@@ -59,29 +59,94 @@ parser.add_argument('--nogpu', action='store_true', help="Don't use the GPU")
 
 #----------------------------------------------------------------------------------------------------------------------------------
 
-#x_limit01 = 200
-#x_limit12 = 570
-#x_limit23 = 660
-#x_limit34 = 740
-#x_limit45 = 1100
-
-y_limit1 = 300
-y_limit2 = 400
 
 
 
-x = 0
-y = 0
-raio = 0
+class Parser(object):
+
+	config = None
+	self.Config = ConfigParser()
 
 
-#----------------------------------------------------------------------------------------------------------------------------------
+	def __readConfig(self):
+		# Read file config.ini
+		while True:
+			if self.Config.read('../Data/config.ini') and 'Vision Ball' in self.Config.sections():
+				print 'Leitura do config.ini, Vision Ball'
+				SERVO_PAN = 			self.Config.getint('Basic Settings', 'Center_Servo_Pan')
+				SERVO_TILT  = 			self.Config.getint('Basic Settings', 'Center_Servo_Tilt')
 
-#x_limit01 = 0
-#x_limit12 = 420
-#x_limit23 = 450
-#x_limit34 = 470
-#x_limit45 = 900
+				SERVO_PAN_LEFT = 		self.Config.getint('Basic Settings', 'Limit_Servo_Pan_Left')
+				SERVO_PAN_RIGHT  = 		self.Config.getint('Basic Settings', 'Limit_Servo_Pan_Right')
+
+				SERVO_TILT_VALUE = 		self.Config.getint('Basic Settings', 'PAN_ID')
+				SERVO_PAN_VALUE = 		self.Config.getint('Basic Settings', 'TILT_ID')
+
+
+				kernel_perto = 			self.Config.getint('Kernel Selection', 'Kernel_closest_Erosion')
+				kernel_perto2 = 		self.Config.getint('Kernel Selection', 'Kernel_closest_Dilation')
+			
+				kernel_medio = 			self.Config.getint('Kernel Selection','Kernel_very_close_Erosion')
+				kernel_medio2 = 		self.Config.getint('Kernel Selection','Kernel_very_close_Dilation')
+
+				kernel_longe = 			self.Config.getint('Kernel Selection', 'Kernel_close_Erosion')
+				kernel_longe2 = 		self.Config.getint('Kernel Selection', 'Kernel_close_Erosion')
+
+				kernel_muito_longe = 	self.Config.getint('Kernel Selection', 'Kernel_far_Erosion')
+				kernel_muito_longe2 = 	self.Config.getint('Kernel Selection', 'Kernel_far_Dilation')
+
+
+
+
+
+				x_esquerdo = 		self.Config.getint('Distance Limits (Pixels)', 'Left_Region_Division')
+				x_centro_esquerdo = self.Config.getint('Distance Limits (Pixels)', 'Center_Left_Region_Division')
+				x_centro = 			self.Config.getint('Distance Limits (Pixels)', 'Center_Region_Division')
+				x_centro_direito = 	self.Config.get('Distance Limits (Pixels)', 'Center_Right_Region_Division')
+				x_direito = 		self.Config.getint('Distance Limits (Pixels)', 'Right_Region_Division')
+
+
+				break
+
+			else:
+				print 'Falha na leitura do config.ini, criando arquivo\nVision Ball inexistente, criando valores padrao'
+				self.Config = ConfigParser()
+				self.Config.write('../Data/config.ini')
+
+				self.Config.add_section('Basic Settings')
+				self.Config.set('Basic Settings', 'Center_Servo_Pan', str(512)+'\t\t\t;Center Servo PAN Position')
+				self.Config.set('Basic Settings', 'Center_Servo_Tilt', str(705)+'\t;Center Servo TILT Position')
+
+				self.Config.set('Basic Settings', 'Limit_Servo_Pan_Left', str(162)+'\t\t\t;Center Servo PAN Position')
+				self.Config.set('Basic Settings', 'Limit_Servo_Pan_Right', str(862)+'\t;Center Servo TILT Position')
+
+				self.Config.set('Basic Settings', 'PAN_ID', str(19)+'\t\t\t;Servo Identification number for PAN')
+				self.Config.set('Basic Settings', 'TILT_ID', str(20)+'\t;Servo Identification number for TILT')
+
+				self.Config.add_section('Kernel Selection')
+				self.Config.set('Kernel Selection', 'Kernel_closest_Erosion', str(39)+'\t\t\t;Kernel Erosion ball is closest the robot')
+				self.Config.set('Kernel Selection', 'Kernel_closest_Dilation', str(100)+'\t;Kernel Dilation ball is closest the robot')
+				self.Config.set('Kernel Selection', 'Kernel_very_close_Erosion', str(22)+'\t\t\t;Kernel Erosion ball is very close to the robot')
+				self.Config.set('Kernel Selection', 'Kernel_very_close_Dilation', str(80)+'\t;Kernel Dilation ball is very close to the robot')
+				self.Config.set('Kernel Selection', 'Kernel_close_Erosion', str(12)+'\t\t\t;Kernel Erosion ball is close to the robot')
+				self.Config.set('Kernel Selection', 'Kernel_close_Dilation', str(40)+'\t;Kernel Dilation ball is close to the robot')
+				self.Config.set('Kernel Selection', 'Kernel_far_Erosion', str(7)+'\t\t\t;Kernel Erosion ball is far from the robot')
+				self.Config.set('Kernel Selection', 'Kernel_far_Dilation', str(30)+'\t;Kernel Dilation ball is far from the robot')
+
+				self.Config.add_section('Distance Limits (Pixels)')
+				self.Config.set('Distance Limits (Pixels)', 'Left_Region_Division'         , str(280)+'\t\t\t;X Screen Left division')
+				self.Config.set('Distance Limits (Pixels)', 'Center_Left_Region_Division'  , str(320)+'\t\t\t;X Screen Center Left division')
+				self.Config.set('Distance Limits (Pixels)', 'Center_Region_Division'       , str(465)+'\t\t\t;X Screen Center division')
+				self.Config.set('Distance Limits (Pixels)', 'Center_Right_Region_Division' , str(645)+'\t\t\t;X Screen Center Right division')
+				self.Config.set('Distance Limits (Pixels)', 'Right_Region_Division'        , str(703)+'\t\t\t;X Screen Right division')
+
+				self.Config.set('Distance Limits (Pixels)', 'Down_Region_Division'  , str(549)+'\t\t\t;Y Screen Down division')
+				self.Config.set('Distance Limits (Pixels)', 'Up_Region_Division'    , str(220)+'\t\t\t;Y Screen Up division')
+
+				with open('../Data/config.ini', 'wb') as configfile:
+					self.Config.write(configfile)
+
+
 
 
 
@@ -95,6 +160,14 @@ x_centro_direito = 645
 y_chute = 549
 y_longe = 220
 
+
+
+
+
+
+x = 0
+y = 0
+raio = 0
 
 
 def BallStatus(x,y,status):
@@ -194,7 +267,7 @@ def BallStatus(x,y,status):
 #		bkb.write_float(Mem,'VISION_TILT_DEG', 0) # Variavel da telemetria
 #		print ("Bola abaixo")
 
-
+#A funcao do Vini
 def applyMask(frame):
 	lower = np.array([23, 0,0])
 	upper = np.array([57,255,255])
@@ -215,7 +288,7 @@ def applyMask(frame):
 
 
 
-
+#Outra funcao do Vini
 def cutFrame(mask_verde):
 ##	#cima
 	cima = -1

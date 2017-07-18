@@ -26,6 +26,14 @@ SERVO_TILT_VALUE = 705 # Posicao central inicial Tilt
 SERVO_PAN_VALUE = 512 # Posicao central inicial Tilt
 
 
+
+
+
+
+
+
+
+
 servo = None
 servo = Servo(SERVO_PAN_VALUE, SERVO_TILT_VALUE)
 
