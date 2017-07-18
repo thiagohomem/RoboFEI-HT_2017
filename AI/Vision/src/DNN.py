@@ -22,10 +22,12 @@ import Condensation
 SERVO_PAN = 19
 SERVO_TILT = 20
 
-SERVO_TILT_VALUE = 705
+SERVO_TILT_VALUE = 705 # Posicao central inicial Tilt
+SERVO_PAN_VALUE = 512 # Posicao central inicial Tilt
+
 
 servo = None
-servo = Servo(512, SERVO_TILT_VALUE)
+servo = Servo(SERVO_PAN_VALUE, SERVO_TILT_VALUE)
 
 
 class objectDetect():
@@ -94,21 +96,21 @@ class objectDetect():
             BallFound = True
         return frame, x, y, raio, BallFound, self.status
 
-
+#Varredura
 def SearchLostBall(self):
 
     if self.Count == 0:
-        servo.writeWord(SERVO_PAN,30 , 100) #olha para a esquerda
+        servo.writeWord(SERVO_PAN,30 , SERVO_PAN_VALUE - 350) #olha para a esquerda
         time.sleep(1)
         self.Count +=1
         return 0
     if self.Count == 1:
-        servo.writeWord(SERVO_PAN,30, 440)#olha para o centro
+        servo.writeWord(SERVO_PAN,30, SERVO_PAN_VALUE)#olha para o centro
         time.sleep(1)
         self.Count +=1
         return 1
     if self.Count == 2:
-        servo.writeWord(SERVO_PAN,30, 850)#olha para a direita
+        servo.writeWord(SERVO_PAN,30, SERVO_PAN_VALUE + 350)#olha para a direita 850- 440
         time.sleep(1)
         self.Count = 0
         return 2

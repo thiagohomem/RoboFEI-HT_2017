@@ -515,8 +515,8 @@ class NaiveIMUDecTurning(TreatingRawData):
                 print 'vision lost'
                 self.set_stand_still()
                 #thiago decision
-                self.set_vision_search()
-                self.set_turn_right()
+                #self.set_vision_search()
+                #self.set_turn_right()
             elif self.get_search_status() == 0: # 0 - object found
 		#print 'entre found'
                 # align to the ball
