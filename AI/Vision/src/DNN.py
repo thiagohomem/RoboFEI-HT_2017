@@ -165,8 +165,7 @@ def Morphology(self, frame, white_mask, kernel, kernel2, k):
 #            print results, type_label
     #       cv2.imshow('janela',images[0])
         if type_label == 'Ball':
-#            print "contador = ", contador
-#            print "CONTOURS = ", time.time() - start3
+
             return frame, x+w/2, y+h/2, (w+h)/4, mask
         #=================================================================================================
 #    print "CONTOURS = ", time.time() - start 
@@ -175,88 +174,4 @@ def Morphology(self, frame, white_mask, kernel, kernel2, k):
 
 
 
-#if __name__ == '__main__':
-
-
-#    parser = argparse.ArgumentParser(description='Classification example using an archive - DIGITS')
-
-####    # Positional arguments
-#    parser.add_argument('archive', help='Path to a DIGITS model archive')
-####    #parser.add_argument('image_file', nargs='+', help='Path[s] to an image')
-####    # Optional arguments
-#    parser.add_argument('--batch-size', type=int)
-#    parser.add_argument('--nogpu', action='store_true', help="Don't use the GPU")
-
-#    parser.add_argument('--ws', '--ws', action='store_true', help="no servo")
-
-#    args = vars(parser.parse_args())
-#    args2 = parser.parse_args()
-
-#    tmpdir = unzip_archive(args['archive'])
-#    caffemodel = None
-#    deploy_file = None
-#    mean_file = None
-#    labels_file = None
-#    for filename in os.listdir(tmpdir):
-#        full_path = os.path.join(tmpdir, filename)
-#        if filename.endswith('.caffemodel'):
-#            caffemodel = full_path
-#        elif filename == 'deploy.prototxt':
-#            deploy_file = full_path
-#        elif filename.endswith('.binaryproto'):
-#            mean_file = full_path
-#        elif filename == 'labels.txt':
-#            labels_file = full_path
-#        else:
-#            print 'Unknown file:', filename
-
-#    assert caffemodel is not None, 'Caffe model file not found'
-#    assert deploy_file is not None, 'Deploy file not found'
-
-####    # Load the model and images
-#    net = get_net(caffemodel, deploy_file, use_gpu=False)
-#    transformer = get_transformer(deploy_file, mean_file)
-#    _, channels, height, width = transformer.inputs['data']
-#    labels = read_labels(labels_file)
-
-####    #create index from label to use in decicion action
-#    number_label =  dict(zip(labels, range(len(labels))))
-#    print number_label
-
-##    detectBall = objectDetect(net, transformer, mean_file, labels)
-
-##    os.system("v4l2-ctl -d /dev/video0 -c focus_auto=0 && v4l2-ctl -d /dev/video0 -c focus_absolute=0")
-##    cap = cv2.VideoCapture(0)
-##    cap.set(3,1280) #720 1280 1920
-##    cap.set(4,720) #480 720 1080
-
-##    while True:
-
-##        script_start_time = time.time()
-
-####        # Capture frame-by-frame
-##        ret, frame = cap.read()
-##        ret, frame = cap.read()
-##        ret, frame = cap.read()
-##        ret, frame = cap.read()
-##        frame = frame[:,200:1100]
-
-##        #===============================================================================
-##        frame, x, y, raio = detectBall.searchball(frame)
-
-##        cv2.circle(frame, (x, y), raio, (0, 255, 0), 4)
-###        cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
-##        cv2.imshow('frame',frame)
-##        print "tempo de varredura = ", time.time() - script_start_time
-##        #===============================================================================
-
-
-##        print 'Script took %f seconds.' % (time.time() - script_start_time,)
-
-##        if cv2.waitKey(1) & 0xFF == ord('q'):
-##            break
-
-##    # When everything done, release the capture
-##    cap.release()
-##    cv2.destroyAllWindows()
 
