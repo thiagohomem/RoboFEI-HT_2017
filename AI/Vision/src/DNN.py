@@ -22,10 +22,10 @@ import Condensation
 SERVO_PAN = 19
 SERVO_TILT = 20
 
-SERVO_TILT_VALUE = 680
+SERVO_TILT_VALUE = 705
 
 servo = None
-servo = Servo(440, SERVO_TILT_VALUE)
+servo = Servo(512, SERVO_TILT_VALUE)
 
 
 class objectDetect():
