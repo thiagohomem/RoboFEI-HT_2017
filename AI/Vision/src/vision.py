@@ -73,35 +73,52 @@ raio = 0
 
 #----------------------------------------------------------------------------------------------------------------------------------
 
-x_limit01 = 0
-x_limit12 = 420
-x_limit23 = 450
-x_limit34 = 470
-x_limit45 = 900
+#x_limit01 = 0
+#x_limit12 = 420
+#x_limit23 = 450
+#x_limit34 = 470
+#x_limit45 = 900
+
+
+
+x_centro = 465
+
+x_esquerdo = 280
+x_centro_esquerdo = 320
+x_direito = 703
+x_centro_direito = 645
+
+y_chute = 549
+y_longe = 220
+
+
 
 def BallStatus(x,y,status):
+	print "X = ", x
+
 	if status  == 1:
 		#Bola a esquerda
-		if (x > x_limit01 and x < x_limit12):
+		if (x <= x_esquerdo):
 			bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
 			print ("Bola a Esquerda")
 
-		#Bola ao centro
-		if (x > x_limit12 and x < x_limit23):
+		#Bola ao centro esquerda
+		if (x > x_esquerdo and x < x_centro):
 			bkb.write_float(Mem,'VISION_PAN_DEG', 30) # Variavel da telemetria
 			print ("Bola ao Centro Esquerda")
 
-		#Bola a direita
-		if (x > x_limit23 and x < x_limit34):
+		#Bola centro direita
+		if (x < x_direito and x > x_centro):
 			bkb.write_float(Mem,'VISION_PAN_DEG', -30) # Variavel da telemetria
 			print ("Bola ao Centro Direita")
 
 		#Bola a direita
-		if (x > x_limit34 and x < x_limit45):
+		if (x >= x_direito):
 			bkb.write_float(Mem,'VISION_PAN_DEG', -60) # Variavel da telemetria
 			print ("Bola a Direita")
+
 	else: 
-		if (status ==0):
+		if (status ==2):
 			bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
 			print ("Bola a Esquerda")
 		else:
@@ -109,23 +126,69 @@ def BallStatus(x,y,status):
 			print ("Bola a Direita")
 
 
-	#CUIDADO AO ALTERAR OS VALORES ABAIXO!! O código abaixo possui inversão de eixos!
-	# O eixo em pixels é de cima para baixo ja as distancias são ao contrario.
-	# Quanto mais alto a bola na tela menor o valor em pixels 
-	# e mais longe estará a bola do robô
-
+#	#CUIDADO AO ALTERAR OS VALORES ABAIXO!! O código abaixo possui inversão de eixos!
+#	# O eixo em pixels é de cima para baixo ja as distancias são ao contrario.
+#	# Quanto mais alto a bola na tela menor o valor em pixels 
+#	# e mais longe estará a bola do robô
 	#Bola abaixo
-	if (y > 1 and y < 200):#y_limit1):
+	if (y < y_longe):
 		bkb.write_float(Mem,'VISION_TILT_DEG', 70) # Variavel da telemetria
 		print ("Bola acima")
 	#Bola ao centro
-	if (y > y_limit1 and y < y_limit2):
+	if (y < y_chute and y > y_longe):
 		bkb.write_float(Mem,'VISION_TILT_DEG', 45) # Variavel da telemetria
 		print ("Bola Centralizada")
 	#Bola acima
-	if (y > y_limit2 and y < 720):
+	if (y >= y_chute):
 		bkb.write_float(Mem,'VISION_TILT_DEG', 0) # Variavel da telemetria
-		print ("Bola abaixo")\
+		print ("Bola abaixo")
+
+#	if status  == 1:
+#		#Bola a esquerda
+#		if (x > x_limit01 and x < x_limit12):
+#			bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
+#			print ("Bola a Esquerda")
+
+#		#Bola ao centro
+#		if (x > x_limit12 and x < x_limit23):
+#			bkb.write_float(Mem,'VISION_PAN_DEG', 30) # Variavel da telemetria
+#			print ("Bola ao Centro Esquerda")
+
+#		#Bola a direita
+#		if (x > x_limit23 and x < x_limit34):
+#			bkb.write_float(Mem,'VISION_PAN_DEG', -30) # Variavel da telemetria
+#			print ("Bola ao Centro Direita")
+
+#		#Bola a direita
+#		if (x > x_limit34 and x < x_limit45):
+#			bkb.write_float(Mem,'VISION_PAN_DEG', -60) # Variavel da telemetria
+#			print ("Bola a Direita")
+#	else: 
+#		if (status ==2):
+#			bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
+#			print ("Bola a Esquerda")
+#		else:
+#			bkb.write_float(Mem,'VISION_PAN_DEG', -60) # Variavel da telemetria
+#			print ("Bola a Direita")
+
+
+#	#CUIDADO AO ALTERAR OS VALORES ABAIXO!! O código abaixo possui inversão de eixos!
+#	# O eixo em pixels é de cima para baixo ja as distancias são ao contrario.
+#	# Quanto mais alto a bola na tela menor o valor em pixels 
+#	# e mais longe estará a bola do robô
+
+#	#Bola abaixo
+#	if (y > 1 and y < 200):#y_limit1):
+#		bkb.write_float(Mem,'VISION_TILT_DEG', 70) # Variavel da telemetria
+#		print ("Bola acima")
+#	#Bola ao centro
+#	if (y > y_limit1 and y < y_limit2):
+#		bkb.write_float(Mem,'VISION_TILT_DEG', 45) # Variavel da telemetria
+#		print ("Bola Centralizada")
+#	#Bola acima
+#	if (y > y_limit2 and y < 720):
+#		bkb.write_float(Mem,'VISION_TILT_DEG', 0) # Variavel da telemetria
+#		print ("Bola abaixo")
 
 
 def applyMask(frame):
@@ -156,7 +219,7 @@ def cutFrame(mask_verde):
 		if np.any(sum(mask_verde[i]))>int(255*500): #minimo pixels
 			cima = i
 			break
-#	
+
 #	#baixo
 	baixo = -1
 	for i in range(len(mask_verde)-1,-1,-5):
@@ -187,13 +250,14 @@ def cutFrame(mask_verde):
 def thread_DNN():
 	time.sleep(1)
 	while True:
-		script_start_time = time.time()
+#		script_start_time = time.time()
 
-		print "FRAME = ", time.time() - script_start_time
-		start = time.time()
+#		print "FRAME = ", time.time() - script_start_time
+		start1 = time.time()
 #===============================================================================
 		ball = False
 		frame_b, x, y, raio, ball, status= detectBall.searchball(frame)
+		print "tempo de varredura = ", time.time() - start1
 		if ball ==False:
 			bkb.write_int(Mem,'VISION_LOST', 1)
 		else:
@@ -203,7 +267,7 @@ def thread_DNN():
 		cv2.circle(frame_b, (x, y), raio, (0, 255, 0), 4)
 		cv2.imshow('frame',frame_b)
 #===============================================================================
-		print "tempo de varredura = ", time.time() - start
+#		print "tempo de varredura = ", time.time() - start
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 			break
 	cap.release()
@@ -264,6 +328,7 @@ if __name__ == '__main__':
         cap.set(3,1280) #720 1280 1920
         cap.set(4,720) #480 720 1080
 	os.system("v4l2-ctl -d /dev/video0 -c focus_auto=0 && v4l2-ctl -d /dev/video0 -c focus_absolute=0")
+	os.system("v4l2-ctl -d /dev/video0 -c saturation=200")
 
 	try:
             thread.start_new_thread(thread_DNN, ())
@@ -278,17 +343,14 @@ if __name__ == '__main__':
 
 		#Salva o frame
 
-		script_start_time = time.time()
+#		script_start_time = time.time()
 
-#                ret, frame = cap.read()
-#                ret, frame = cap.read()
-#                ret, frame = cap.read()
                 ret, frame = cap.read()
                 frame = frame[:,200:1100]
 		
 		
-		print "FRAME = ", time.time() - script_start_time
-		start = time.time()
+#		print "FRAME = ", time.time() - script_start_time
+#		start = time.time()
 #===============================================================================
 #		cv2.imshow('Original',frame)
 #		mask_verde = applyMask(frame)
@@ -304,10 +366,11 @@ if __name__ == '__main__':
 #			cv2.circle(frame, (x, y), raio, (0, 255, 0), 4)
 #			cv2.imshow('Frame Deteccao',frame)
 #===============================================================================
-		print "tempo de varredura = ", time.time() - start
+#		print "tempo de varredura = ", time.time() - start
 		#cv2.imshow('frame',frame)
-		#if cv2.waitKey(1) & 0xFF == ord('q'):
-		#	break
+#		if cv2.waitKey(1) & 0xFF == ord('q'):
+#			break
+		time.sleep(0.01)
 
 #===============================================================================
 

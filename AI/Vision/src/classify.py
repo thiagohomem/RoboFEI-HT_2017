@@ -45,10 +45,10 @@ def classify(image_files, net, transformer,
         classifications.append(result)
 
     for index, classification in enumerate(classifications):
-        print '{:-^80}'.format(' Prediction for image ')
+#        print '{:-^80}'.format(' Prediction for image ')
         for label, confidence in classification:
-            print '{:9.4%} - "{}"'.format(confidence / 100.0, label)
+#            print '{:9.4%} - "{}"'.format(confidence / 100.0, label)
             results[label] = confidence / 100.0
-        print
+#        print
     return classification[0][0], results
 
