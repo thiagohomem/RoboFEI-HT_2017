@@ -44,6 +44,10 @@ Mem = bkb.shd_constructor(mem_key)
 
 parser = argparse.ArgumentParser(description='Robot Vision', epilog= 'Responsavel pela deteccao dos objetos em campo / Responsible for detection of Field objects')
 parser.add_argument('--visionball', '--vb', action="store_true", help = 'Calibra valor para a visao da bola')
+parser.add_argument('--visionMask', '--vm', action="store_true", help = 'Calibra valor para a visao da bola')
+parser.add_argument('--visionMorph1', '--vm1', action="store_true", help = 'Mostra a imagem da morfologia perto')
+parser.add_argument('--visionMorph2', '--vm2', action="store_true", help = 'Mostra a imagem da morfologia medio')
+parser.add_argument('--visionMorph3', '--vm3', action="store_true", help = 'Mostra a imagem da morfologia medio')
 parser.add_argument('--withoutservo', '--ws', action="store_true", help = 'Servos desligado')
 parser.add_argument('--head', '--he', action="store_true", help = 'Configurando parametros do controle da cabeca')
 parser.add_argument('archive', help='Path to a DIGITS model archive')
@@ -256,16 +260,16 @@ def thread_DNN():
 		start1 = time.time()
 #===============================================================================
 		ball = False
-		frame_b, x, y, raio, ball, status= detectBall.searchball(frame)
+		frame_b, x, y, raio, ball, status= detectBall.searchball(frame, args2.visionMask, args2.visionMorph1, args2.visionMorph2, args2.visionMorph3)
 		print "tempo de varredura = ", time.time() - start1
 		if ball ==False:
 			bkb.write_int(Mem,'VISION_LOST', 1)
 		else:
 			bkb.write_int(Mem,'VISION_LOST', 0)
 			BallStatus(x,y,status)
-		#if args2.visionball:
-		cv2.circle(frame_b, (x, y), raio, (0, 255, 0), 4)
-		cv2.imshow('frame',frame_b)
+		if args2.visionball:
+			cv2.circle(frame_b, (x, y), raio, (0, 255, 0), 4)
+			cv2.imshow('frame',frame_b)
 #===============================================================================
 #		print "tempo de varredura = ", time.time() - start
 		if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -334,8 +338,6 @@ if __name__ == '__main__':
             thread.start_new_thread(thread_DNN, ())
 	except:
             print "Error Thread"
-
-
 
 	while True:
 

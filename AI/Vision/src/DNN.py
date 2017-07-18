@@ -51,20 +51,30 @@ class objectDetect():
         self.net = net
         self.transformer = transformer
 
-    def searchball(self, image):
+    def searchball(self, image, visionMask, visionMorph1, visionMorph2, visionMorph3):
 
         YUV_frame = cv2.cvtColor(image, cv2.COLOR_BGR2YUV)
         white_mask = cv2.inRange(YUV_frame[:,:,0], 200, 255)
-        start2 = time.time()
+
+        if visionMask:
+            cv2.imshow('Frame Mascara', white_mask)
+
+#        start2 = time.time()
         BallFound = False
-        frame, x, y, raio = Morphology(self,image , white_mask,self.kernel_perto, self.kernel_perto2,1)
-        print "Search = ", time.time() - start2 
+        frame, x, y, raio, maskM = Morphology(self,image , white_mask,self.kernel_perto, self.kernel_perto2,1)
+        if visionMorph1:
+            cv2.imshow('Morfologia 1', maskM)
+#        print "Search = ", time.time() - start2 
         if (x==0 and y==0 and raio==0):
-            frame, x, y, raio = Morphology(self,image, white_mask,self.kernel_medio ,self.kernel_medio2,2)
+            frame, x, y, raio, maskM = Morphology(self,image, white_mask,self.kernel_medio ,self.kernel_medio2,2)
+            if visionMorph2:
+                cv2.imshow('Morfologia 2', maskM)
             if (x==0 and y==0 and raio==0):
-                frame, x, y, raio = Morphology(self,image, white_mask,self.kernel_longe , self.kernel_longe2,3)
+                frame, x, y, raio, maskM = Morphology(self,image, white_mask,self.kernel_longe , self.kernel_longe2,3)
+                if visionMorph3:
+                    cv2.imshow('Morfologia 3', maskM)
                 if (x==0 and y==0 and raio==0):
-                    frame, x, y, raio = Morphology(self,image, white_mask,self.kernel_muito_longe, self.kernel_muito_longe2,4)
+                    frame, x, y, raio, maskM = Morphology(self,image, white_mask,self.kernel_muito_longe, self.kernel_muito_longe2,4)
                     if (x==0 and y==0 and raio==0):
                         self.CountLostFrame +=1
                         print("@@@@@@@@@@@@@@@@@@@",self.CountLostFrame)
@@ -122,10 +132,10 @@ def Morphology(self, frame, white_mask, kernel, kernel2, k):
         mask[650:,:]=0
 # Se a morfologia de longe k =3, recorta a parte de baixo
     if k ==3:
-        mask[520:,:]=0
+        mask[450:,:]=0
 # Se a morfologia de muito longe k = 4, recorta a parte de baixo
     if k ==4:
-        mask[500:,:]=0
+        mask[400:,:]=0
 
 
     ret,th1 = cv2.threshold(mask,25,255,cv2.THRESH_BINARY)
@@ -147,10 +157,10 @@ def Morphology(self, frame, white_mask, kernel, kernel2, k):
         if type_label == 'Ball':
 #            print "contador = ", contador
 #            print "CONTOURS = ", time.time() - start3
-            return frame, x+w/2, y+h/2, (w+h)/4
+            return frame, x+w/2, y+h/2, (w+h)/4, mask
         #=================================================================================================
 #    print "CONTOURS = ", time.time() - start 
-    return frame, 0, 0, 0
+    return frame, 0, 0, 0, mask
 
 
 
