@@ -3,7 +3,7 @@
 import sys
 sys.path.append("./src")
 import numpy as np
-import os
+#import os
 import cv2
 import ctypes
 import argparse
@@ -33,11 +33,11 @@ except ImportError:
 """ Instantiate bkb as a shared memory """
 bkb = SharedMemory()
 """ Config is a new configparser """
-config = ConfigParser()
+config1 = ConfigParser()
 """ Path for the file config.ini:"""
-config.read('../../Control/Data/config.ini')
+config1.read('../../Control/Data/config.ini')
 """ Mem_key is for all processes to know where the blackboard is. It is robot number times 100"""
-mem_key = int(config.get('Communication', 'no_player_robofei'))*100 
+mem_key = int(config1.get('Communication', 'no_player_robofei'))*100 
 """Memory constructor in mem_key"""
 Mem = bkb.shd_constructor(mem_key)
 
@@ -50,11 +50,6 @@ parser.add_argument('--visionMorph2', '--vm2', action="store_true", help = 'Most
 parser.add_argument('--visionMorph3', '--vm3', action="store_true", help = 'Mostra a imagem da morfologia medio')
 parser.add_argument('--withoutservo', '--ws', action="store_true", help = 'Servos desligado')
 parser.add_argument('--head', '--he', action="store_true", help = 'Configurando parametros do controle da cabeca')
-parser.add_argument('archive', help='Path to a DIGITS model archive')
-###    #parser.add_argument('image_file', nargs='+', help='Path[s] to an image')
-###    # Optional arguments
-parser.add_argument('--batch-size', type=int)
-parser.add_argument('--nogpu', action='store_true', help="Don't use the GPU")
 
 
 #----------------------------------------------------------------------------------------------------------------------------------
@@ -267,7 +262,7 @@ def thread_DNN():
 if __name__ == '__main__':
 
 
-	args = vars(parser.parse_args())
+#	args = vars(parser.parse_args())
 	args2 = parser.parse_args()
 
 	config = classConfig()

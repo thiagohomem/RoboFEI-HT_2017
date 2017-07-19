@@ -86,27 +86,27 @@ def get_transformer(deploy_file, mean_file=None):
     return t
 
 
-def load_image(path, height, width, mode='RGB'):
-    """
-    Load an image from disk
+#def load_image(path, height, width, mode='RGB'):
+#    """
+#    Load an image from disk
 
-    Returns an np.ndarray (channels x width x height)
+#    Returns an np.ndarray (channels x width x height)
 
-    Arguments:
-    path -- path to an image on disk
-    width -- resize dimension
-    height -- resize dimension
+#    Arguments:
+#    path -- path to an image on disk
+#    width -- resize dimension
+#    height -- resize dimension
 
-    Keyword arguments:
-    mode -- the PIL mode that the image should be converted to
-        (RGB for color or L for grayscale)
-    """
-    image = PIL.Image.open(path)
-    image = image.convert(mode)
-    image = np.array(image)
-    # squash
-    image = scipy.misc.imresize(image, (height, width), 'bilinear')
-    return image
+#    Keyword arguments:
+#    mode -- the PIL mode that the image should be converted to
+#        (RGB for color or L for grayscale)
+#    """
+#    image = PIL.Image.open(path)
+#    image = image.convert(mode)
+#    image = np.array(image)
+#    # squash
+#    image = scipy.misc.imresize(image, (height, width), 'bilinear')
+#    return image
 
 
 def forward_pass(images, net, transformer, batch_size=None):
@@ -205,32 +205,32 @@ def unzip_archive(archive):
     return tmpdir
 
 
-if __name__ == '__main__':
-    script_start_time = time.time()
+#if __name__ == '__main__':
+#    script_start_time = time.time()
 
-    parser = argparse.ArgumentParser(description='Classification example - DIGITS')
+#    parser = argparse.ArgumentParser(description='Classification example - DIGITS')
 
-    # Positional arguments
-    parser.add_argument('caffemodel', help='Path to a .caffemodel')
-    parser.add_argument('deploy_file', help='Path to the deploy file')
-    parser.add_argument('image_file', nargs='+', help='Path[s] to an image')
+#    # Positional arguments
+#    parser.add_argument('caffemodel', help='Path to a .caffemodel')
+#    parser.add_argument('deploy_file', help='Path to the deploy file')
+#    parser.add_argument('image_file', nargs='+', help='Path[s] to an image')
 
-    # Optional arguments
-    parser.add_argument('-m', '--mean', help='Path to a mean file (*.npy)')
-    parser.add_argument('-l', '--labels', help='Path to a labels file')
-    parser.add_argument('--batch-size', type=int)
-    parser.add_argument('--nogpu', action='store_true', help="Don't use the GPU")
+#    # Optional arguments
+#    parser.add_argument('-m', '--mean', help='Path to a mean file (*.npy)')
+#    parser.add_argument('-l', '--labels', help='Path to a labels file')
+#    parser.add_argument('--batch-size', type=int)
+#    parser.add_argument('--nogpu', action='store_true', help="Don't use the GPU")
 
-    args = vars(parser.parse_args())
+#    args = vars(parser.parse_args())
 
-    classify(
-        args['caffemodel'],
-        args['deploy_file'],
-        args['image_file'],
-        args['mean'],
-        args['labels'],
-        args['batch_size'],
-        not args['nogpu'],
-    )
+#    classify(
+#        args['caffemodel'],
+#        args['deploy_file'],
+#        args['image_file'],
+#        args['mean'],
+#        args['labels'],
+#        args['batch_size'],
+#        not args['nogpu'],
+#    )
 
-    print 'Script took %f seconds.' % (time.time() - script_start_time,)
+#    print 'Script took %f seconds.' % (time.time() - script_start_time,)
