@@ -59,200 +59,172 @@ parser.add_argument('--nogpu', action='store_true', help="Don't use the GPU")
 
 #----------------------------------------------------------------------------------------------------------------------------------
 
-#x_limit01 = 200
-#x_limit12 = 570
-#x_limit23 = 660
-#x_limit34 = 740
-#x_limit45 = 1100
 
-y_limit1 = 300
-y_limit2 = 400
+class Vision():
 
+	def __init__(self):
+		# Read config.ini
+		self.Config = ConfigParser()
+		self.__CheckConfig()
+		x = 0
+		y = 0
+		raio = 0
 
+		SERVO_PAN = None
+		SERVO_TILT  = None
 
-x = 0
-y = 0
-raio = 0
+		SERVO_PAN_LEFT = None
+		SERVO_PAN_RIGHT  = None
 
-
-#----------------------------------------------------------------------------------------------------------------------------------
-
-#x_limit01 = 0
-#x_limit12 = 420
-#x_limit23 = 450
-#x_limit34 = 470
-#x_limit45 = 900
+		SERVO_TILT_VALUE = None
+		SERVO_PAN_VALUE = None
 
 
-
-x_centro = 465
-
-x_esquerdo = 280
-x_centro_esquerdo = 320
-x_direito = 703
-x_centro_direito = 645
-
-y_chute = 549
-y_longe = 220
-
-
-
-def BallStatus(x,y,status):
-	print "X = ", x
-
-	if status  == 1:
-		#Bola a esquerda
-		if (x <= x_esquerdo):
-			bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
-			print ("Bola a Esquerda")
-
-		#Bola ao centro esquerda
-		if (x > x_esquerdo and x < x_centro):
-			bkb.write_float(Mem,'VISION_PAN_DEG', 30) # Variavel da telemetria
-			print ("Bola ao Centro Esquerda")
-
-		#Bola centro direita
-		if (x < x_direito and x > x_centro):
-			bkb.write_float(Mem,'VISION_PAN_DEG', -30) # Variavel da telemetria
-			print ("Bola ao Centro Direita")
-
-		#Bola a direita
-		if (x >= x_direito):
-			bkb.write_float(Mem,'VISION_PAN_DEG', -60) # Variavel da telemetria
-			print ("Bola a Direita")
-
-	else: 
-		if (status ==2):
-			bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
-			print ("Bola a Esquerda")
-		else:
-			bkb.write_float(Mem,'VISION_PAN_DEG', -60) # Variavel da telemetria
-			print ("Bola a Direita")
-
-
-#	#CUIDADO AO ALTERAR OS VALORES ABAIXO!! O código abaixo possui inversão de eixos!
-#	# O eixo em pixels é de cima para baixo ja as distancias são ao contrario.
-#	# Quanto mais alto a bola na tela menor o valor em pixels 
-#	# e mais longe estará a bola do robô
-	#Bola abaixo
-	if (y < y_longe):
-		bkb.write_float(Mem,'VISION_TILT_DEG', 70) # Variavel da telemetria
-		print ("Bola acima")
-	#Bola ao centro
-	if (y < y_chute and y > y_longe):
-		bkb.write_float(Mem,'VISION_TILT_DEG', 45) # Variavel da telemetria
-		print ("Bola Centralizada")
-	#Bola acima
-	if (y >= y_chute):
-		bkb.write_float(Mem,'VISION_TILT_DEG', 0) # Variavel da telemetria
-		print ("Bola abaixo")
-
-#	if status  == 1:
-#		#Bola a esquerda
-#		if (x > x_limit01 and x < x_limit12):
-#			bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
-#			print ("Bola a Esquerda")
-
-#		#Bola ao centro
-#		if (x > x_limit12 and x < x_limit23):
-#			bkb.write_float(Mem,'VISION_PAN_DEG', 30) # Variavel da telemetria
-#			print ("Bola ao Centro Esquerda")
-
-#		#Bola a direita
-#		if (x > x_limit23 and x < x_limit34):
-#			bkb.write_float(Mem,'VISION_PAN_DEG', -30) # Variavel da telemetria
-#			print ("Bola ao Centro Direita")
-
-#		#Bola a direita
-#		if (x > x_limit34 and x < x_limit45):
-#			bkb.write_float(Mem,'VISION_PAN_DEG', -60) # Variavel da telemetria
-#			print ("Bola a Direita")
-#	else: 
-#		if (status ==2):
-#			bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
-#			print ("Bola a Esquerda")
-#		else:
-#			bkb.write_float(Mem,'VISION_PAN_DEG', -60) # Variavel da telemetria
-#			print ("Bola a Direita")
-
-
-#	#CUIDADO AO ALTERAR OS VALORES ABAIXO!! O código abaixo possui inversão de eixos!
-#	# O eixo em pixels é de cima para baixo ja as distancias são ao contrario.
-#	# Quanto mais alto a bola na tela menor o valor em pixels 
-#	# e mais longe estará a bola do robô
-
-#	#Bola abaixo
-#	if (y > 1 and y < 200):#y_limit1):
-#		bkb.write_float(Mem,'VISION_TILT_DEG', 70) # Variavel da telemetria
-#		print ("Bola acima")
-#	#Bola ao centro
-#	if (y > y_limit1 and y < y_limit2):
-#		bkb.write_float(Mem,'VISION_TILT_DEG', 45) # Variavel da telemetria
-#		print ("Bola Centralizada")
-#	#Bola acima
-#	if (y > y_limit2 and y < 720):
-#		bkb.write_float(Mem,'VISION_TILT_DEG', 0) # Variavel da telemetria
-#		print ("Bola abaixo")
-
-
-def applyMask(frame):
-	lower = np.array([23, 0,0])
-	upper = np.array([57,255,255])
-        kernel = np.ones((5,5),np.uint8)
-#        mask = frame
-	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+		kernel_perto = None
+		kernel_perto2 = None
 	
-	mask = cv2.inRange(hsv, lower, upper)
-	
-	## erosion
-	mask = cv2.erode(mask,kernel,iterations=2)
-	
-	## dilation
-	mask = cv2.dilate(mask,kernel,iterations=2)
-	#mostra = cv2.bitwise_and(frame,frame,mask=mask)
-	return mask
+		kernel_medio = None
+		kernel_medio2 = None
+
+		kernel_longe = None
+		kernel_longe2 = None
+
+		kernel_muito_longe = None
+		kernel_muito_longe2 = None
+
+		x_left = None
+		x_center_left = None
+		x_center = None
+		x_center_right = None
+		x_right = None
 
 
 
 
+	def __CheckConfig(self):
+		# Read file config.ini
+		while True:
+			if self.Config.read('../Data/config.ini') in self.Config.sections():
+				print 'Leitura do config.ini'
+				self.SERVO_PAN = 			self.Config.getint('Basic Settings', 'Center_Servo_Pan')
+				self.SERVO_TILT  = 			self.Config.getint('Basic Settings', 'Center_Servo_Tilt')
 
-def cutFrame(mask_verde):
-##	#cima
-	cima = -1
-	for i in range(0,len(mask_verde),5):
-		if np.any(sum(mask_verde[i]))>int(255*500): #minimo pixels
-			cima = i
-			break
+				self.SERVO_PAN_LEFT = 		self.Config.getint('Basic Settings', 'Limit_Servo_Pan_Left')
+				self.SERVO_PAN_RIGHT  = 	self.Config.getint('Basic Settings', 'Limit_Servo_Pan_Right')
 
-#	#baixo
-	baixo = -1
-	for i in range(len(mask_verde)-1,-1,-5):
-		if np.any(sum(mask_verde[i]))>int(255*500): #minimo pixels
-			baixo = i
-			break
-#	
-#	# Girando mascara
-	mask_verde=mask_verde.transpose()
-#	
-#	#esp p/ dir
-	esquerda = -1
-	for i in range(0,len(mask_verde),5):
-		if np.any(sum(mask_verde[i]))>int(255*500): #minimo 4 pixels
-			esquerda = i
-			break
-#	
-#	#dir p/ esp
-	direita = -1
-	for i in range(len(mask_verde)-1,0,-5):
-		if np.any(sum(mask_verde[i]))>int(255*500): #minimo 4 pixels
-			direita = i
-			break
-	
-	return np.array([esquerda,direita,cima,baixo])
+				self.SERVO_TILT_VALUE = 	self.Config.getint('Basic Settings', 'PAN_ID')
+				self.SERVO_PAN_VALUE = 		self.Config.getint('Basic Settings', 'TILT_ID')
+
+				self.kernel_perto =			self.Config.getint('Kernel Selection', 'Kernel_closest_Erosion')
+				self.kernel_perto2 = 		self.Config.getint('Kernel Selection', 'Kernel_closest_Dilation')
+			
+				self.kernel_medio = 		self.Config.getint('Kernel Selection','Kernel_very_close_Erosion')
+				self.kernel_medio2 = 		self.Config.getint('Kernel Selection','Kernel_very_close_Dilation')
+
+				self.kernel_longe = 		self.Config.getint('Kernel Selection', 'Kernel_close_Erosion')
+				self.kernel_longe2 = 		self.Config.getint('Kernel Selection', 'Kernel_close_Erosion')
+
+				self.kernel_muito_longe = 	self.Config.getint('Kernel Selection', 'Kernel_far_Erosion')
+				self.kernel_muito_longe2 = 	self.Config.getint('Kernel Selection', 'Kernel_far_Dilation')
+
+				self.x_left = 				self.Config.getint('Distance Limits (Pixels)', 'Left_Region_Division')
+				self.x_center = 			self.Config.getint('Distance Limits (Pixels)', 'Center_Region_Division')
+				self.x_right = 				self.Config.getint('Distance Limits (Pixels)', 'Right_Region_Division')
+
+				break
+
+			else:
+				print 'Falha na leitura do config.ini, criando arquivo\nVision Ball inexistente, criando valores padrao'
+				self.Config = ConfigParser()
+				self.Config.write('../Data/config.ini')
+
+				self.Config.add_section('Basic Settings')
+				self.Config.set('Basic Settings', 'Center_Servo_Pan'       , str(512)+'\t\t\t;Center Servo PAN Position')
+				self.Config.set('Basic Settings', 'Center_Servo_Tilt'      , str(705)+'\t;Center Servo TILT Position')
+
+				self.Config.set('Basic Settings', 'Limit_Servo_Pan_Left'   , str(162)+'\t\t\t;Center Servo PAN Position')
+				self.Config.set('Basic Settings', 'Limit_Servo_Pan_Right'  , str(862)+'\t;Center Servo TILT Position')
+
+				self.Config.set('Basic Settings', 'PAN_ID'                 , str(19)+'\t\t\t;Servo Identification number for PAN')
+				self.Config.set('Basic Settings', 'TILT_ID'                , str(20)+'\t;Servo Identification number for TILT')
+
+				self.Config.add_section('Kernel Selection')
+				self.Config.set('Kernel Selection', 'Kernel_closest_Erosion'    , str(39)+'\t\t\t;Kernel Erosion ball is closest the robot')
+				self.Config.set('Kernel Selection', 'Kernel_closest_Dilation'   , str(100)+'\t;Kernel Dilation ball is closest the robot')
+				self.Config.set('Kernel Selection', 'Kernel_very_close_Erosion' , str(22)+'\t\t\t;Kernel Erosion ball is very close to the robot')
+				self.Config.set('Kernel Selection', 'Kernel_very_close_Dilation', str(80)+'\t;Kernel Dilation ball is very close to the robot')
+				self.Config.set('Kernel Selection', 'Kernel_close_Erosion'      , str(12)+'\t\t\t;Kernel Erosion ball is close to the robot')
+				self.Config.set('Kernel Selection', 'Kernel_close_Dilation'     , str(40)+'\t;Kernel Dilation ball is close to the robot')
+				self.Config.set('Kernel Selection', 'Kernel_far_Erosion'        , str(7)+'\t\t\t;Kernel Erosion ball is far from the robot')
+				self.Config.set('Kernel Selection', 'Kernel_far_Dilation'       , str(30)+'\t;Kernel Dilation ball is far from the robot')
+
+				self.Config.add_section('Distance Limits (Pixels)')
+				self.Config.set('Distance Limits (Pixels)', 'Left_Region_Division'         , str(280)+'\t\t\t;X Screen Left division')
+				self.Config.set('Distance Limits (Pixels)', 'Center_Region_Division'       , str(465)+'\t\t\t;X Screen Center division')
+				self.Config.set('Distance Limits (Pixels)', 'Right_Region_Division'        , str(703)+'\t\t\t;X Screen Right division')
+
+				self.Config.set('Distance Limits (Pixels)', 'Down_Region_Division'         , str(549)+'\t\t\t;Y Screen Down division')
+				self.Config.set('Distance Limits (Pixels)', 'Up_Region_Division'           , str(220)+'\t\t\t;Y Screen Up division')
+
+				with open('../Data/config.ini', 'wb') as configfile:
+					self.Config.write(configfile)
+
+
+
+	def BallStatus(x,y,status):
+
+		if status  == 1:
+			#Bola a esquerda
+			if (x <= x_left):
+				bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
+				print ("Bola a Esquerda")
+
+			#Bola ao centro esquerda
+			if (x > x_left and x < x_center):
+				bkb.write_float(Mem,'VISION_PAN_DEG', 30) # Variavel da telemetria
+				print ("Bola ao Centro Esquerda")
+
+			#Bola centro direita
+			if (x < x_right and x > x_center):
+				bkb.write_float(Mem,'VISION_PAN_DEG', -30) # Variavel da telemetria
+				print ("Bola ao Centro Direita")
+
+			#Bola a direita
+			if (x >= x_right):
+				bkb.write_float(Mem,'VISION_PAN_DEG', -60) # Variavel da telemetria
+				print ("Bola a Direita")
+
+		else: 
+			if (status ==2):
+				bkb.write_float(Mem,'VISION_PAN_DEG', 60) # Posição da bola
+				print ("Bola a Esquerda")
+			else:
+				bkb.write_float(Mem,'VISION_PAN_DEG', -60) # Variavel da telemetria
+				print ("Bola a Direita")
+
+
+	#	#CUIDADO AO ALTERAR OS VALORES ABAIXO!! O código abaixo possui inversão de eixos!
+	#	# O eixo em pixels é de cima para baixo ja as distancias são ao contrario.
+	#	# Quanto mais alto a bola na tela menor o valor em pixels 
+	#	# e mais longe estará a bola do robô
+		#Bola abaixo
+		if (y < y_longe):
+			bkb.write_float(Mem,'VISION_TILT_DEG', 70) # Variavel da telemetria
+			print ("Bola acima")
+		#Bola ao centro
+		if (y < y_chute and y > y_longe):
+			bkb.write_float(Mem,'VISION_TILT_DEG', 45) # Variavel da telemetria
+			print ("Bola Centralizada")
+		#Bola acima
+		if (y >= y_chute):
+			bkb.write_float(Mem,'VISION_TILT_DEG', 0) # Variavel da telemetria
+			print ("Bola abaixo")
 
 
 def thread_DNN():
 	time.sleep(1)
+
+	img = Vision()
 	while True:
 #		script_start_time = time.time()
 
@@ -266,7 +238,7 @@ def thread_DNN():
 			bkb.write_int(Mem,'VISION_LOST', 1)
 		else:
 			bkb.write_int(Mem,'VISION_LOST', 0)
-			BallStatus(x,y,status)
+			img.BallStatus(x,y,status)
 		if args2.visionball:
 			cv2.circle(frame_b, (x, y), raio, (0, 255, 0), 4)
 			cv2.imshow('frame',frame_b)
@@ -276,13 +248,6 @@ def thread_DNN():
 			break
 	cap.release()
 	cv2.destroyAllWindows()
-
-#frame = 0
-
-
-
-
-
 
 
 #----------------------------------------------------------------------------------------------------------------------------------
@@ -343,47 +308,17 @@ if __name__ == '__main__':
 
 		bkb.write_int(Mem,'VISION_WORKING', 1) # Variavel da telemetria
 
-		#Salva o frame
+		ret, frame = cap.read()
+		frame = frame[:,200:1100]
 
-#		script_start_time = time.time()
 
-                ret, frame = cap.read()
-                frame = frame[:,200:1100]
-		
-		
-#		print "FRAME = ", time.time() - script_start_time
-#		start = time.time()
-#===============================================================================
-#		cv2.imshow('Original',frame)
-#		mask_verde = applyMask(frame)
-#		#if mask_verde is not 0:
-#		cut = cutFrame(mask_verde)
-#		#frame_campo = mask_verde
-#		frame_campo = frame[cut[2]:cut[3], cut[0]:cut[1]]
-#		mostra = cv2.bitwise_and(frame,frame,mask=mask_verde)
-#		cv2.imshow('Frame Cortado Grama',mostra)
-#		frame_b, x, y, raio = detectBall.searchball(frame)
-#		BallStatus(x,y)
-#		if args2.visionball:
-#			cv2.circle(frame, (x, y), raio, (0, 255, 0), 4)
-#			cv2.imshow('Frame Deteccao',frame)
-#===============================================================================
-#		print "tempo de varredura = ", time.time() - start
-		#cv2.imshow('frame',frame)
-#		if cv2.waitKey(1) & 0xFF == ord('q'):
-#			break
 		time.sleep(0.01)
 
 #===============================================================================
-
-#		if args2.withoutservo == False:
-#			posheadball = head.mov(positionballframe,posheadball,Mem, bkb)
-	
-
-#	raw_input("Pressione enter pra continuar")
-
-#	if args2.withoutservo == False:
-#		head.finalize()
-#	ball.finalize()
-#	cv2.destroyAllWindows()
-#	cap.release()
+#===============================================================================
+#===============================================================================
+#===============================================================================
+#===============================================================================
+#===============================================================================
+#===============================================================================
+#===============================================================================
