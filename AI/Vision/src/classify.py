@@ -15,23 +15,16 @@ def classify(image_files, net, transformer,
     labels_file path to a .txt file
     use_gpu -- if True, run inference on the GPU
     """
-#    if channels == 3:
-#        mode = 'RGB'
-#    elif channels == 1:
-#        mode = 'L'
-#    else:
-#        raise ValueError('Invalid number for channels: %s' % channels)
-    images = [image_files]
 
     # Classify the image
-    scores = forward_pass(images, net, transformer, batch_size=batch_size)
+    scores = forward_pass([image_files], net, transformer, batch_size=batch_size)
 
     #
     # Process the results
     #
     results = {}
 
-    indices = (-scores).argsort()[:, :7]  # take top 9 results
+    indices = (-scores).argsort()  # take top results
     classifications = []
     for image_index, index_list in enumerate(indices):
         result = []

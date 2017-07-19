@@ -205,32 +205,3 @@ def unzip_archive(archive):
     return tmpdir
 
 
-#if __name__ == '__main__':
-#    script_start_time = time.time()
-
-#    parser = argparse.ArgumentParser(description='Classification example - DIGITS')
-
-#    # Positional arguments
-#    parser.add_argument('caffemodel', help='Path to a .caffemodel')
-#    parser.add_argument('deploy_file', help='Path to the deploy file')
-#    parser.add_argument('image_file', nargs='+', help='Path[s] to an image')
-
-#    # Optional arguments
-#    parser.add_argument('-m', '--mean', help='Path to a mean file (*.npy)')
-#    parser.add_argument('-l', '--labels', help='Path to a labels file')
-#    parser.add_argument('--batch-size', type=int)
-#    parser.add_argument('--nogpu', action='store_true', help="Don't use the GPU")
-
-#    args = vars(parser.parse_args())
-
-#    classify(
-#        args['caffemodel'],
-#        args['deploy_file'],
-#        args['image_file'],
-#        args['mean'],
-#        args['labels'],
-#        args['batch_size'],
-#        not args['nogpu'],
-#    )
-
-#    print 'Script took %f seconds.' % (time.time() - script_start_time,)
