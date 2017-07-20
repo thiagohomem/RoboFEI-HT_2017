@@ -69,10 +69,10 @@ class TreatingRawData(object):
         return self.bkb.read_int(self.mem, 'COM_REFEREE')
 
     def get_motor_tilt_degrees(self):
-        return self.bkb.read_float(self.mem,'VISION_TILT_DEG')
+        return int(self.bkb.read_float(self.mem,'VISION_TILT_DEG'))
 
     def get_motor_pan_degrees(self):
-        return self.bkb.read_float(self.mem,'VISION_PAN_DEG')
+        return int(self.bkb.read_float(self.mem,'VISION_PAN_DEG'))
 
 
     def get_angle_ball(self):
@@ -453,6 +453,8 @@ class NaiveIMUDecTurning(TreatingRawData):
     def decision(self, referee):
 
         print self.get_motor_pan_degrees()
+	print self.get_motor_tilt_degrees()
+	print 'search status ', self.get_search_status()
 
         if referee == 1:  # stopped
             print 'stand'
@@ -492,11 +494,14 @@ class NaiveIMUDecTurning(TreatingRawData):
             #print 'dist_ball', self.get_dist_ball()
             print 'orientation', self.get_orientation()
 
-            self.set_walk_forward_slow(1000)
-            time.sleep(22)
-            self.set_turn_left()
-            time.sleep(7)
-            self.set_stand_still()
+
+		#ver pra que serve isso
+            #self.set_walk_forward_slow(1000)
+            #time.sleep(22)
+            #self.set_turn_left()
+            #time.sleep(7)
+            #self.set_stand_still()
+
 
             #do not kick twice - it is not funcionning!!
 #            if self.bkb.read_int(self.mem,'DECISION_ACTION_A') == 4 or self.bkb.read_int(self.mem,'DECISION_ACTION_A') == 5:
@@ -510,9 +515,10 @@ class NaiveIMUDecTurning(TreatingRawData):
                 print 'vision lost'
                 self.set_stand_still()
                 #thiago decision
-                self.set_vision_search()
-                self.set_turn_right()
+                #self.set_vision_search()
+                #self.set_turn_right()
             elif self.get_search_status() == 0: # 0 - object found
+		#print 'entre found'
                 # align to the ball
                 if self.get_motor_pan_degrees() == 60:
                     self.set_turn_left()
@@ -521,7 +527,9 @@ class NaiveIMUDecTurning(TreatingRawData):
                     self.set_turn_right()
                     #self.set_stand_still()
                 else:
-                    if self.get_motor_tilt_degrees == 0 and self.get_motor_pan_degrees() == -30:
+
+                    if self.get_motor_tilt_degrees() == 0 and self.get_motor_pan_degrees() == -30:
+			print 'entrei'
                         if self.get_orientation() <= 40 and self.get_orientation() >= -40:
                             self.set_kick_right()
                         elif self.get_orientation() > 40:
@@ -532,7 +540,7 @@ class NaiveIMUDecTurning(TreatingRawData):
                             #revolve_anticlockwise:
                             self.set_pass_left()
                             #########
-                    elif self.get_motor_tilt_degrees == 0  and self.get_motor_pan_degrees() == 30:
+                    elif self.get_motor_tilt_degrees() == 0  and self.get_motor_pan_degrees() == 30:
                         if self.get_orientation() <= 40 and self.get_orientation() >= -40:
                             self.set_kick_left()
                         elif self.get_orientation() > 40:
@@ -543,7 +551,7 @@ class NaiveIMUDecTurning(TreatingRawData):
                             #revolve_anticlockwise:
                             self.set_pass_left()
                             #########
-                    elif self.get_motor_tilt_degrees == 60: #longe
+                    elif self.get_motor_tilt_degrees() == 70: #longe
                         self.set_walk_forward()
                         #self.set_walk_forward_slow((self.get_dist_ball() / 5))
                     #elif self.get_dist_ball() <= 26:
