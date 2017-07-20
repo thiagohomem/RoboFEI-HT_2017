@@ -115,6 +115,8 @@ class classConfig():
 
 				self.white_threshould = 	self.Config.getint('Basic Settings', 'white_threshould')
 
+				self.max_count_lost_frame = 	self.Config.getint('Basic Settings', 'max_count_lost_frame')
+
 				self.kernel_perto =		self.Config.getint('Kernel Selection', 'kernel_perto')
 				self.kernel_perto2 = 		self.Config.getint('Kernel Selection', 'kernel_perto2')
 			
@@ -151,6 +153,9 @@ class classConfig():
 
 				self.Config.set('Basic Settings', 'dnn_type'                , "r_80_cv4_32_256.tar.gz"+'\t;Dnn type')
 				self.Config.set('Basic Settings', 'white_threshould'        , str(200)+'\t;Threshould')
+
+				self.Config.set('Basic Settings', 'max_count_lost_frame'        , str(10)+'\t;Threshould')
+
 
 				self.Config.add_section('Kernel Selection')
 				self.Config.set('Kernel Selection', 'kernel_perto'    , str(39)+'\t\t\t;Kernel Erosion ball is closest the robot')

@@ -82,7 +82,7 @@ class objectDetect():
                     if (x==0 and y==0 and raio==0):
                         self.CountLostFrame +=1
                         print("@@@@@@@@@@@@@@@@@@@",self.CountLostFrame)
-                        if self.CountLostFrame==10:
+                        if self.CountLostFrame==self.config.max_count_lost_frame:
                             BallFound = False
                             self.CountLostFrame = 0
                             print("----------------------------------------------------------------------")
