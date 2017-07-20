@@ -55,7 +55,7 @@ class objectDetect():
         if not self.withoutservo:
             self.servo = Servo(self.config.CENTER_SERVO_PAN, self.config.POSITION_SERVO_TILT)
 
-    def searchball(self, image, visionMask, visionMorph1, visionMorph2, visionMorph3):
+    def searchball(self, image, visionMask, visionMorph1, visionMorph2, visionMorph3, visionMorph4):
 
         YUV_frame = cv2.cvtColor(image, cv2.COLOR_BGR2YUV)
         white_mask = cv2.inRange(YUV_frame[:,:,0], self.config.white_threshould, 255)
@@ -79,6 +79,8 @@ class objectDetect():
                     cv2.imshow('Morfologia 3', maskM)
                 if (x==0 and y==0 and raio==0):
                     frame, x, y, raio, maskM = self.Morphology(image, white_mask,self.kernel_muito_longe, self.kernel_muito_longe2,4)
+                    if visionMorph4:
+                        cv2.imshow('Morfologia 4', maskM)
                     if (x==0 and y==0 and raio==0):
                         self.CountLostFrame +=1
                         print("@@@@@@@@@@@@@@@@@@@",self.CountLostFrame)
@@ -139,7 +141,7 @@ class objectDetect():
             mask[450:,:]=0
     # Se a morfologia de muito longe k = 4, recorta a parte de baixo
         if k ==4:
-            mask[400:,:]=0
+            mask[350:,:]=0
 
 
         ret,th1 = cv2.threshold(mask,25,255,cv2.THRESH_BINARY)

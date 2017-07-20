@@ -47,7 +47,8 @@ parser.add_argument('--visionball', '--vb', action="store_true", help = 'Calibra
 parser.add_argument('--visionMask', '--vm', action="store_true", help = 'Calibra valor para a visao da bola')
 parser.add_argument('--visionMorph1', '--vm1', action="store_true", help = 'Mostra a imagem da morfologia perto')
 parser.add_argument('--visionMorph2', '--vm2', action="store_true", help = 'Mostra a imagem da morfologia medio')
-parser.add_argument('--visionMorph3', '--vm3', action="store_true", help = 'Mostra a imagem da morfologia medio')
+parser.add_argument('--visionMorph3', '--vm3', action="store_true", help = 'Mostra a imagem da morfologia longe')
+parser.add_argument('--visionMorph4', '--vm4', action="store_true", help = 'Mostra a imagem da morfologia muito longe')
 parser.add_argument('--withoutservo', '--ws', action="store_true", help = 'Servos desligado')
 parser.add_argument('--head', '--he', action="store_true", help = 'Configurando parametros do controle da cabeca')
 
@@ -243,7 +244,7 @@ def thread_DNN():
 		start1 = time.time()
 #===============================================================================
 		ball = False
-		frame_b, x, y, raio, ball, status= detectBall.searchball(frame, args2.visionMask, args2.visionMorph1, args2.visionMorph2, args2.visionMorph3)
+		frame_b, x, y, raio, ball, status= detectBall.searchball(frame, args2.visionMask, args2.visionMorph1, args2.visionMorph2, args2.visionMorph3, args2.visionMorph4)
 		print "tempo de varredura = ", time.time() - start1
 		if ball ==False:
 			bkb.write_int(Mem,'VISION_LOST', 1)
