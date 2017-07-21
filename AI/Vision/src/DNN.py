@@ -52,7 +52,7 @@ class objectDetect():
         self.kernel_longe2 = np.ones((self.config.kernel_longe2, self.config.kernel_longe2), np.uint8)
         self.kernel_muito_longe = np.ones((self.config.kernel_muito_longe, self.config.kernel_muito_longe), np.uint8)
         self.kernel_muito_longe2 = np.ones((self.config.kernel_muito_longe2, self.config.kernel_muito_longe2), np.uint8)
-        if not self.withoutservo:
+        if self.withoutservo==False:
             self.servo = Servo(self.config.CENTER_SERVO_PAN, self.config.POSITION_SERVO_TILT)
 
     def searchball(self, image, visionMask, visionMorph1, visionMorph2, visionMorph3, visionMorph4): 
@@ -105,17 +105,17 @@ class objectDetect():
     def SearchLostBall(self):
 
         if self.Count == 0:
-            servo.writeWord(self.config.SERVO_PAN_ID,30 , self.config.CENTER_SERVO_PAN - self.config.SERVO_PAN_LEFT) #olha para a esquerda
+            self.servo.writeWord(self.config.SERVO_PAN_ID,30 , self.config.CENTER_SERVO_PAN - self.config.SERVO_PAN_LEFT) #olha para a esquerda
             time.sleep(1)
             self.Count +=1
             return 0
         if self.Count == 1:
-            servo.writeWord(self.config.SERVO_PAN_ID,30, self.config.CENTER_SERVO_PAN)#olha para o centro
+            self.servo.writeWord(self.config.SERVO_PAN_ID,30, self.config.CENTER_SERVO_PAN)#olha para o centro
             time.sleep(1)
             self.Count +=1
             return 1
         if self.Count == 2:
-            servo.writeWord(self.config.SERVO_PAN_ID,30, self.config.CENTER_SERVO_PAN + self.config.SERVO_PAN_RIGHT)#olha para a direita 850- 440
+            self.servo.writeWord(self.config.SERVO_PAN_ID,30, self.config.CENTER_SERVO_PAN + self.config.SERVO_PAN_RIGHT)#olha para a direita 850- 440
             time.sleep(1)
             self.Count = 0
             return 2

@@ -109,8 +109,8 @@ class classConfig():
 				self.SERVO_PAN_LEFT = 		self.Config.getint('Basic Settings', 'servo_pan_left')
 				self.SERVO_PAN_RIGHT  = 	self.Config.getint('Basic Settings', 'servo_pan_right')
 
-				self.SERVO_TILT_ID = 		self.Config.getint('Basic Settings', 'PAN_ID')
-				self.SERVO_PAN_ID = 		self.Config.getint('Basic Settings', 'TILT_ID')
+				self.SERVO_PAN_ID    = 		self.Config.getint('Basic Settings', 'PAN_ID')
+				self.SERVO_TILT_ID   = 		self.Config.getint('Basic Settings', 'TILT_ID')
 
 				self.DNN_type = 		self.Config.get('Basic Settings', 'dnn_type')
 
