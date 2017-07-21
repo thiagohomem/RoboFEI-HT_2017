@@ -462,7 +462,12 @@ class NaiveIMUDecTurning(TreatingRawData):
 
         elif referee == 11:  # ready
             print 'ready'
-            self.set_stand_still()
+            #new rule: the robot must to enter in the soccer field
+            #self.set_stand_still()
+            #ele apenas anda, sem procurar a bola. no set ele começa a procurar.
+            #talvez seja necessário retirar o if da linha 486, onde ele anda por 20 segundos.
+            #self.set_vision_ball()
+            self.set_walk_forward()
 
         elif referee == 12:  # set
             print 'set'
