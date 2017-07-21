@@ -1,9 +1,9 @@
 #!/bin/bash
 #!/RoboFEI-HT/build/bin
 
-echo "starting communication"
+echo "communication"
 
-cd ..
-cd Communication/src/
+cd ../
+cd build/Communication/
 
-python receiver.py
+sudo ./communication
