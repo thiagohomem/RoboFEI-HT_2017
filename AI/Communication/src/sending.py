@@ -77,10 +77,14 @@ while(True):
     # Used for Telemetry
     message = str(rbt_number) + ' ' # Robot number
     # Localization Variables
-    message += str(bkb.read_int(mem,'LOCALIZATION_X')) + ' ' # X Position
-    message += str(bkb.read_int(mem,'LOCALIZATION_Y')) + ' ' # Y Position
-    message += str(bkb.read_int(mem,'LOCALIZATION_THETA')) + ' ' # THETA Position
-    message += str(bkb.read_float(mem,'LOCALIZATION_RBT01_X')) + ' ' # Belief
+    # message += str(bkb.read_int(mem,'LOCALIZATION_X')) + ' ' # X Position
+    # message += str(bkb.read_int(mem,'LOCALIZATION_Y')) + ' ' # Y Position
+    # message += str(bkb.read_int(mem,'LOCALIZATION_THETA')) + ' ' # THETA Position
+    # message += str(bkb.read_float(mem,'LOCALIZATION_RBT01_X')) + ' ' # Belief
+    message += str(X_ROBOT) + ' '
+    message += str(Y_ROBOT) + ' '
+    message += str(bkb.read_float(mem, 'IMU_EULER_Z')) + ' '
+    message += str(2) + ' '
     message += str(bkb.read_float(mem, 'VISION_BALL_DIST')) + ' ' # Distance Ball's Position
     message += str(bkb.read_float(mem, 'VISION_PAN_DEG')) + ' ' # Angle Ball's Position
     # Flags of Execution
