@@ -467,12 +467,34 @@ class NaiveIMUDecTurning(TreatingRawData):
             #ele apenas anda, sem procurar a bola. no set ele começa a procurar.
             #talvez seja necessário retirar o if da linha 486, onde ele anda por 20 segundos.
             #self.set_vision_ball()
+
+            #o ready é de 30s. Se ele estiver andando muito rápido, trocar por walkslow.
             self.set_walk_forward()
 
         elif referee == 12:  # set
             print 'set'
-            self.set_stand_still()
+            #self.set_stand_still()
+            ###############################
+            #aqui não dá pra usar a IMU. Pq funcionaria em um lado do campo (entra e vira à direita)...
+            #mas do outro lado, não daria: entra e vira à esquerda. Precisaria trocar a funcao no intervalo.
+
+            #if self.get_orientation() > 40 or self.get_orientation() < -40:
+            #    self.set_turn_right()  #pensando que ele está andando
+
+            ###############################
+
+            ###############################
+            #optei por fazer ele andar durante os 30s do ready e no set, ele olhar pra bola e se alinhar com ela.
             self.set_vision_ball()
+            if self.get_search_status() == 0:  # 0 - object found
+                # align to the ball
+                if self.get_motor_pan_degrees() >= 30:  #30 ou 60
+                    self.set_turn_left()
+                elif self.get_motor_pan_degrees() <= -30: #-30 ou -60
+                    self.set_turn_right()
+                else: #a bola esta alinhada, fica parado.
+                    self.set_stand_still()
+
 
        # elif referee == 21 and self.kickoff_ctrl == 0:
        #     print 'walking forward for vision to see anything'
@@ -534,7 +556,7 @@ class NaiveIMUDecTurning(TreatingRawData):
                 else:
 
                     if self.get_motor_tilt_degrees() == 0 and self.get_motor_pan_degrees() == -30:
-			print 'entrei'
+			            #print 'entrei'
                         if self.get_orientation() <= 40 and self.get_orientation() >= -40:
                             self.set_kick_right()
                         elif self.get_orientation() > 40:
