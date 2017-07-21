@@ -79,8 +79,8 @@ class objectDetect():
                     cv2.imshow('Morfologia 3', maskM)
                 if (x==0 and y==0 and raio==0):
                     frame, x, y, raio, maskM = self.Morphology(image, white_mask,self.kernel_muito_longe, self.kernel_muito_longe2,4)
-                        if visionMorph4: 
-                            cv2.imshow('Morfologia 4', maskM) 
+                    if visionMorph4: 
+                        cv2.imshow('Morfologia 4', maskM) 
                     if (x==0 and y==0 and raio==0):
                         self.CountLostFrame +=1
                         print("@@@@@@@@@@@@@@@@@@@",self.CountLostFrame)
