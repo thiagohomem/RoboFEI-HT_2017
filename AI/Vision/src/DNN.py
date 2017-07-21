@@ -37,13 +37,15 @@ class objectDetect():
     transformer = None
     status =1
 
-    def __init__(self, net, transformer, mean_file, labels, withoutservo, config):
+    def __init__(self, net, transformer, mean_file, labels, withoutservo, config, bkb, Mem):
         self.mean_file = mean_file
         self.labels = labels
         self.net = net
         self.transformer = transformer
         self.withoutservo = withoutservo
         self.config = config
+        self.bkb = bkb
+        self.Mem = Mem
         self.kernel_perto = np.ones((self.config.kernel_perto, self.config.kernel_perto), np.uint8)
         self.kernel_perto2 = np.ones((self.config.kernel_perto2, self.config.kernel_perto2), np.uint8)
         self.kernel_medio = np.ones((self.config.kernel_medio, self.config.kernel_medio), np.uint8)
@@ -62,6 +64,7 @@ class objectDetect():
 
         if visionMask:
             cv2.imshow('Frame Mascara', white_mask)
+
 
 #        start2 = time.time()
         BallFound = False
@@ -104,21 +107,22 @@ class objectDetect():
     #Varredura
     def SearchLostBall(self):
 
-        if self.Count == 0:
-            self.servo.writeWord(self.config.SERVO_PAN_ID,30 , self.config.CENTER_SERVO_PAN - self.config.SERVO_PAN_LEFT) #olha para a esquerda
-            time.sleep(1)
-            self.Count +=1
-            return 0
-        if self.Count == 1:
-            self.servo.writeWord(self.config.SERVO_PAN_ID,30, self.config.CENTER_SERVO_PAN)#olha para o centro
-            time.sleep(1)
-            self.Count +=1
-            return 1
-        if self.Count == 2:
-            self.servo.writeWord(self.config.SERVO_PAN_ID,30, self.config.CENTER_SERVO_PAN + self.config.SERVO_PAN_RIGHT)#olha para a direita 850- 440
-            time.sleep(1)
-            self.Count = 0
-            return 2
+        if self.bkb.read_int(self.Mem,'IMU_STATE')==0:
+            if self.Count == 0:
+                self.servo.writeWord(self.config.SERVO_PAN_ID,30 , self.config.CENTER_SERVO_PAN - self.config.SERVO_PAN_LEFT) #olha para a esquerda
+                time.sleep(1)
+                self.Count +=1
+                return 0
+            if self.Count == 1:
+                self.servo.writeWord(self.config.SERVO_PAN_ID,30, self.config.CENTER_SERVO_PAN)#olha para o centro
+                time.sleep(1)
+                self.Count +=1
+                return 1
+            if self.Count == 2:
+                self.servo.writeWord(self.config.SERVO_PAN_ID,30, self.config.CENTER_SERVO_PAN + self.config.SERVO_PAN_RIGHT)#olha para a direita 850- 440
+                time.sleep(1)
+                self.Count = 0
+                return 2
 
 
 
