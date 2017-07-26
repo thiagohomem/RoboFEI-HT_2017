@@ -307,7 +307,7 @@ if __name__ == '__main__':
 
 	ballS = ballStatus(config)
 	detectBall = objectDetect(net, transformer, mean_file, labels, args2.withoutservo, config, bkb, Mem)
-	detectBall.servo.writeWord(config.SERVO_TILT_ID,34, 70)#olha para o centro
+#	detectBall.servo.writeWord(config.SERVO_TILT_ID,34, 70)#olha para o centro
 
 	cap = cv2.VideoCapture(0) #Abrindo camera
         cap.set(3,1280) #720 1280 1920
@@ -322,16 +322,16 @@ if __name__ == '__main__':
 
 	while True:
 
-		if bkb.read_int(Mem,'IMU_STATE')==1:
-			detectBall.servo.writeWord(config.SERVO_TILT_ID,34, 512)#olha para o centro
-			detectBall.servo.writeWord(config.SERVO_TILT_ID,32, 1023)#velocidade
-			detectBall.servo.writeWord(config.SERVO_PAN_ID,32, 1023)#velocidade
-			detectBall.servo.writeWord(config.SERVO_TILT_ID,30, config.POSITION_SERVO_TILT+350)#olha para o centro
-			time.sleep(0.5)
-			detectBall.servo.writeWord(config.SERVO_TILT_ID,34, 100)#olha para o centro
-			detectBall.servo.writeWord(config.SERVO_PAN_ID,30, config.CENTER_SERVO_PAN)#olha para o centro
-		else:
-			detectBall.servo.writeWord(config.SERVO_TILT_ID,30, config.POSITION_SERVO_TILT)#olha para o centro
+#		if bkb.read_int(Mem,'IMU_STATE')==1:
+#			detectBall.servo.writeWord(config.SERVO_TILT_ID,34, 512)#olha para o centro
+#			detectBall.servo.writeWord(config.SERVO_TILT_ID,32, 1023)#velocidade
+#			detectBall.servo.writeWord(config.SERVO_PAN_ID,32, 1023)#velocidade
+#			detectBall.servo.writeWord(config.SERVO_TILT_ID,30, config.POSITION_SERVO_TILT+350)#olha para o centro
+#			time.sleep(0.5)
+#			detectBall.servo.writeWord(config.SERVO_TILT_ID,34, 100)#olha para o centro
+#			detectBall.servo.writeWord(config.SERVO_PAN_ID,30, config.CENTER_SERVO_PAN)#olha para o centro
+#		else:
+#			detectBall.servo.writeWord(config.SERVO_TILT_ID,30, config.POSITION_SERVO_TILT)#olha para o centro
 
 		bkb.write_int(Mem,'VISION_WORKING', 1) # Variavel da telemetria
 
