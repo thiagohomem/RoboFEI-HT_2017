@@ -44,7 +44,7 @@ else:
     Y_ROBOT = 220
 # This will be removed after Localization is finished.
 
-UDP_IP = "255.255.255.255"
+UDP_IP = "192.168.255.255"
 UDP_PORT1 = 1231
 UDP_PORT2 = 1232
 UDP_PORT3 = 1233
@@ -102,6 +102,7 @@ while(True):
     message += str(bkb.read_int(mem, 'DECISION_ACTION_A')) + ' ' # Sends the movement the decision is executing.
     message += str(bkb.read_float(mem, 'IMU_EULER_Z')) + ' ' # Sends the orientation of the IMU
     message += str(bkb.read_int(mem, 'VOLTAGE')) + ' ' # Sends the Voltage on motors.
+    message += str(bkb.read_int(mem, 'VISION_LOST')) + ' '
 
     # End of Message
     message += 'OUT'
